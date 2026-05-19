@@ -1,0 +1,72 @@
+.video-container {
+  flex: 1;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #000;
+  overflow: hidden;
+  position: relative;
+  /* Enable container-query units (100cqw / 100cqh) for descendants so the
+     SBS eye frame can size itself to min(container_w, container_h)
+     regardless of orientation. */
+  container-type: size;
+}
+
+.video-element {
+  width: 100%;
+  height: 100%;
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+  background: #000;
+}
+
+/* Non-SBS pass-through wrapper — keeps the JSX structure stable so the
+   <video> element doesn't remount when isSBS toggles. */
+.video-passthrough {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* SBS path: a 1:1 frame (one eye is square) sized to the container's
+   shorter axis — works in both landscape and portrait. Inside, the video
+   element is 2x wide, anchored to the right, so only the right-eye half
+   shows. The other axis letterboxes. */
+.sbs-eye-frame {
+  /* min(container_w, container_h) = "largest square that fits".
+     Container queries require .video-container to have container-type: size. */
+  width: min(100cqw, 100cqh);
+  height: min(100cqw, 100cqh);
+  position: relative;
+  overflow: hidden;
+  background: #000;
+}
+
+.video-element-sbs {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 200%;
+  height: 100%;
+  object-fit: cover;
+  background: #000;
+}
+
+.mute-toggle {
+  position: absolute;
+  bottom: 12px;
+  right: 12px;
+  background: rgba(0, 0, 0, 0.6);
+  border-radius: 8px;
+  color: #fff;
+  padding: 6px 12px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  pointer-events: none;
+}
